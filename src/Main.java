@@ -1,23 +1,57 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+class Bogie {
+    private String name;
+    private int capacity;
+
+    public Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + capacity + " seats)";
+    }
+}
 
 public class Main {
 
     public static void main(String[] args) {
         System.out.println("=== Train Consist Management App ===\n");
 
-        // Initialize HashMap to store bogie-capacity mapping
-        Map<String, Integer> bogieCapacityMap = new HashMap<>();
+        // Create a list of bogies
+        List<Bogie> bogies = new ArrayList<>();
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 60));
+        bogies.add(new Bogie("First Class", 50));
+        bogies.add(new Bogie("Executive", 80));
 
-        // Add bogies with their capacities
-        bogieCapacityMap.put("Sleeper", 72);
-        bogieCapacityMap.put("AC Chair", 60);
-        bogieCapacityMap.put("First Class", 50);
+        // Display original list
+        System.out.println("Original Bogie List:");
+        bogies.forEach(System.out::println);
 
-        // Display bogie capacities
-        System.out.println("Bogie capacities:");
-        for (Map.Entry<String, Integer> entry : bogieCapacityMap.entrySet()) {
-            System.out.println(entry.getKey() + " => " + entry.getValue() + " seats");
-        }
+        // Filter bogies with capacity > 60 using Streams
+        List<Bogie> highCapacityBogies = bogies.stream()
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
+
+        // Display filtered list
+        System.out.println("\nFiltered Bogies (capacity > 60):");
+        highCapacityBogies.forEach(System.out::println);
+
+        // Ensure original list remains unchanged
+        System.out.println("\nOriginal list after filtering (unchanged):");
+        bogies.forEach(System.out::println);
     }
 }
