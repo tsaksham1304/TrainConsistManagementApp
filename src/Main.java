@@ -1,52 +1,44 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
-class Bogie {
-    private String type;
-    private int capacity;
+public class TrainValidator {
 
-    public Bogie(String type, int capacity) {
-        this.type = type;
-        this.capacity = capacity;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    @Override
-    public String toString() {
-        return type + " (" + capacity + " seats)";
-    }
-}
-
-public class Main {
     public static void main(String[] args) {
-        System.out.println("=== Train Consist Management App ===\n");
+        Scanner sc = new Scanner(System.in);
 
-        // Step 1: Create list of bogies
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 60));
-        bogies.add(new Bogie("First Class", 50));
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("Executive", 80));
-        bogies.add(new Bogie("AC Chair", 60));
+        // Step 1: Ask user input
+        System.out.print("Enter Train ID (format TRN-1234): ");
+        String trainID = sc.nextLine();
 
-        // Step 2: Display original list
-        System.out.println("Original Bogie List:");
-        bogies.forEach(System.out::println);
+        System.out.print("Enter Cargo Code (format PET-AB): ");
+        String cargoCode = sc.nextLine();
 
-        // Step 3: Calculate total seating capacity using Stream + map + reduce
-        int totalSeats = bogies.stream()
-                .map(Bogie::getCapacity)       // Extract capacity of each bogie
-                .reduce(0, Integer::sum);      // Sum all capacities
+        // Step 2: Define regex patterns
+        String trainIDPattern = "TRN-\\d{4}";       // TRN- followed by exactly 4 digits
+        String cargoCodePattern = "PET-[A-Z]{2}";   // PET- followed by exactly 2 uppercase letters
 
-        // Step 4: Display total seats
-        System.out.println("\nTotal Seating Capacity of the Train: " + totalSeats);
+        // Step 3: Compile patterns
+        Pattern trainPattern = Pattern.compile(trainIDPattern);
+        Pattern cargoPattern = Pattern.compile(cargoCodePattern);
+
+        // Step 4: Match input
+        Matcher trainMatcher = trainPattern.matcher(trainID);
+        Matcher cargoMatcher = cargoPattern.matcher(cargoCode);
+
+        // Step 5: Validate and display result
+        if (trainMatcher.matches()) {
+            System.out.println("Train ID is valid ✅");
+        } else {
+            System.out.println("Train ID is invalid ❌");
+        }
+
+        if (cargoMatcher.matches()) {
+            System.out.println("Cargo Code is valid ✅");
+        } else {
+            System.out.println("Cargo Code is invalid ❌");
+        }
+
+        sc.close();
     }
 }
